@@ -96,7 +96,6 @@ const GraphForm = ({ setGraphData, setTime, setPrice }) => {
         navigate("/graph");
 
         e.preventDefault();
-        console.log(state);
     };
     useEffect(() => {}, [setTime, setPrice]);
 
@@ -152,7 +151,7 @@ const GraphForm = ({ setGraphData, setTime, setPrice }) => {
                                         key={rangeIndex}
                                         className="flex items-center gap-4"
                                     >
-                                        <div>
+                                        <div className="flex items-center gap-2">
                                             <InputField
                                                 type="date"
                                                 placeholder="date"

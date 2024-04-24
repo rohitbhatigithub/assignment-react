@@ -1,26 +1,26 @@
-import React, { useState } from "react";
+import React from "react";
 import { Line } from "react-chartjs-2";
 import { CategoryScale } from "chart.js";
 import Chart from "chart.js/auto";
 
 const Graph = ({ graphData, setGraphData, time, Price }) => {
     Chart.register(CategoryScale);
-    const [activeGraphIndex, setActiveGraphIndex] = useState(false);
 
-    const x = (index) => {
-        setActiveGraphIndex(index);
-    };
-
-    const deleteGraph = (index) => {
-        const updatedGraphData = graphData.filter((data, idx) => idx !== index);
+    const deleteGraph = (data) => {
+        const updatedGraphData = graphData.filter((ele) => ele.id !== data.id);
         setGraphData(updatedGraphData);
     };
 
     // Prepare the data for the charts
     const charts = graphData.map((data, index) => {
+        // Check if data.range exists before mapping over it
+        if (!data.range) {
+            return null; // Or handle the case where data.range is undefined
+        }
+
         const allTimes = data.range.map((range) => range.time);
         const allPrice = data.range.map((range) => range.price);
-        console.log(data);
+
         const chartData = {
             labels: allTimes,
             datasets: [
@@ -53,14 +53,13 @@ const Graph = ({ graphData, setGraphData, time, Price }) => {
         };
 
         return (
-            <div
-                className={`w-[35rem] ${
-                    activeGraphIndex === index ? "w-[75rem]" : " w-[35rem]"
-                }`}
-                key={index}
-            >
-                <button onClick={() => x(index)}>click</button>
-                <button onClick={() => deleteGraph(index)}>Delete</button>
+            <div className=" flex items-center gap-6 w-[30rem]" key={index}>
+                <button
+                    className="text-white  text-sm font-medium rounded-md  bg-red-500 px-3 py-2 "
+                    onClick={() => deleteGraph(data)}
+                >
+                    Delete
+                </button>
                 <Line data={chartData} options={chartOptions} />
             </div>
         );
